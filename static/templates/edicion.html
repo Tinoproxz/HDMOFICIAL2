@@ -1,0 +1,22 @@
+{% extends "./base.html" %}
+
+{% block title %} Gestión de {{tabla}} {% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <center><h2>Edición de {{tabla}}</h2></center>
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div ><center>{{ formu }}</center> {% csrf_token %}</div>
+                    <div class="form-group">
+                        <center><button type="submit" class="btn btn-success  text-white float-end "><i class="bi bi-save"> Guardar</i></button></center>
+                        <a href={{volver}} class="btn btn-danger"><i class="bi bi-skip-backward-circle"> Volver</i></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,178 @@
+{% extends "./base.html" %}
+
+{% block title %} 
+    {{ tabla }}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+            <center><h3 class="alert alert-warning">Agregar {{tabla}}</h3></center>
+            <br>
+            <form method="POST">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <!-- DEPENDIENDO DE LA VISTA QUE SE DESPLIEGUE SE CARGARA EL FORMULARIO -->
+                        {% csrf_token %}
+                        {{ formu }}
+                        <br>
+                        <div class="d-grid gap-2">
+                            <button type="submit" method ="POST" class="btn btn-success text-white mx-auto d-block "><i class="bi bi-save"> Guardar</i></button>
+                        </div>        
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        {% if tabla == 'Habitaciones' %}
+        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8 ">
+            <h3 class="alert alert-success">Listado de Habitaciones</h3>
+            {% if data1 %}
+                <div class="table-responsive py-2">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>N. Habitacion</th>
+                                <th>Estado</th>
+                                <th>Orientacion</th>
+                                <th>Precio</th>
+                                <th>Capacidad</th>
+                                <th colspan="2">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in data1 %}
+                                <tr>
+                                    <td>{{ h.num_habi }}</td>
+                                    <td>{{ h.estado }}</td>
+                                    <td>{{ h.orientacion }}</td>
+                                    <td>{{ h.prec_habi }}</td>
+                                    <td>{{ h.capacidad }}</td>
+                                    <td><a href="/eliminarHabitacion/{{h.num_habi}}" class="btn btn-danger btn-sm "> <i class="bi bi-trash"></i></a></td>
+                                    <td><a href="/editarHabitacion/{{h.num_habi}}" class="btn btn-warning btn-sm " onclick= return confirm('¿Desea Eliminar la Habitacion?')> <i class="bi bi-pencil"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>NO HAY DATOS</p>
+            {% endif %}
+        </div>
+        {% elif tabla == 'Huespedes' %}
+        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+            {% if data2 %}
+                <h3 class="alert alert-success">Listado de Huespedes</h3>
+                <div class="table-responsive py-2">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Rut</th>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Correo</th>
+                                <th>Numero Celular</th>
+                                <th>Residencia</th>
+                                <th colspan="2">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in data2 %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ h.rut }}</td>
+                                    <td>{{ h.nombre }}</td>
+                                    <td>{{ h.apellidos }}</td>
+                                    <td>{{ h.correo }}</td>
+                                    <td>{{ h.num_telefono }}</td>
+                                    <td>{{ h.residencia }}</td>
+                                    <td><a href="/eliminarHuesped/{{h.rut}}" class="btn btn-danger btn-sm "> <i class="bi bi-trash"></i></a></td>
+                                    <td><a href="/editarHuesped/{{h.rut}}" class="btn btn-warning btn-sm " onclick= return confirm('¿Desea Eliminar el Huesped?') > <i class="bi bi-pencil"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>NO HAY DATOS</p>
+            {% endif %}
+        </div>
+        {% elif tabla == 'Reservas' %}
+        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+            {% if data3 %}
+                <h3 class="alert alert-success">Listado de Reservas</h3>
+                <div class="table-responsive py-2">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Rut Huesped</th>
+                                <th>F.Rerserva</th>
+                                <th>N.Habitacion</th>
+                                <th>F.Ingreso</th>
+                                <th>F.Salida</th>
+                                <th>Usuario</th>
+                                <th colspan="2">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in data3 %}
+                                <tr>
+                                    <td>{{ h.id_reserva }}</td>
+                                    <td>{{ h.rut }}</td>
+                                    <td>{{ h.fechaReserva }}</td>
+                                    <td>{{ h.num_habi }}</td>
+                                    <td>{{ h.fechaIngreso }}</td>
+                                    <td>{{ h.fechaSalida }}</td>
+                                    <td><a href="/eliminarReserva/{{h.id_reserva}}" class="btn btn-danger btn-sm "> <i class="bi bi-trash"></i></a></td>
+                                    <td><a href="/editarReserva/{{h.id_reserva}}" class="btn btn-warning btn-sm " onclick= return confirm('¿Desea Eliminar la Rerserva?')> <i class="bi bi-pencil"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>NO HAY DATOS</p>
+            {% endif %}
+        </div>
+        {% elif tabla == 'Usuarios' %}
+        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+            {% if data4 %}
+                <h3 class="alert alert-success">Listado de Usuarios</h3>
+                <div class="table-responsive py-2">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Rut</th>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Estado</th>
+                                <th>Cargo</th>
+                                <th colspan="2">Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for h in data4 %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ h.rut_usu }}</td>
+                                    <td>{{ h.nombre }}</td>
+                                    <td>{{ h.apellidos }}</td>
+                                    <td>{{ h.estado }}</td>
+                                    <td>{{ h.cargo }}</td>
+                                    <td><a href="/eliminarUsuario/{{h.rut_usu}}" class="btn btn-danger btn-sm "> <i class="bi bi-trash"></i></a></td>
+                                    <td><a href="/editarUsuario/{{h.rut_usu}}" class="btn btn-warning btn-sm " onclick= return confirm('¿Desea Eliminar el Usuario?')> <i class="bi bi-pencil"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>NO HAY DATOS</p>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

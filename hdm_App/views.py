@@ -28,9 +28,8 @@ def iniSesion(request):
                         return redirect('administrador/')  # Ajusta el nombre de la URL segun tu configuración
         else:
             form = inicioSesion()
-
-        data = {"formulario": form,"titulo":"Inicio Sesión Hotel Duerme Bien",'nboton':'Iniciar Sesion', 'rut_usu': rut_usuform}
-        return render(request, 'inisesion.html', data)
+            data = {"formulario": form,"titulo":"Inicio Sesión Hotel Duerme Bien",'nboton':'Iniciar Sesion'}
+            return render(request, 'inisesion.html', data)
     except:
         data = {'r2': 'USUARIO O CONTRASEÑA INCORRECTOS',"formulario": form,"titulo":"Inicio Sesión Hotel Duerme Bien",'nboton':'Iniciar Sesion'}
         return render(request, 'inisesion.html', data)
@@ -39,11 +38,11 @@ def iniSesion(request):
 
 #VISTAS ADMINISTRADOR
 def encargado(request):
-    data ={'cargo' : 'encargado','rut_usu': rut_usuform}
+    data ={'cargo' : 'encargado','rut_usu': rut_usuform,'title':'Encargado HDM'}
     return render(request,"base.html",data)
 
 def administrador(request):
-    data ={'cargo' : 'administrador','rut_usu': rut_usuform}
+    data ={'cargo' : 'administrador','rut_usu': rut_usuform,'title':'Administrador HDM'}
     return render(request,"base.html",data)
 
 def usuario(request):

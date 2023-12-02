@@ -48,8 +48,8 @@
                                     <td>{{ h.orientacion }}</td>
                                     <td>{{ h.prec_habi }}</td>
                                     <td>{{ h.capacidad }}</td>
-                                    <td><a href="/eliminarHabitacion/{{h.num_habi}}" class="btn btn-danger btn-sm "> <i class="bi bi-trash"></i></a></td>
-                                    <td><a href="/editarHabitacion/{{h.num_habi}}" class="btn btn-warning btn-sm " onclick= return confirm('¿Desea Eliminar la Habitacion?')> <i class="bi bi-pencil"></i></a></td>
+                                    <td><a href="/eliminarHabitacion/{{h.num_habi}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar la Habitacion?')"> <i class="bi bi-trash"></i></a></td>
+                                    <td><a href="/editarHabitacion/{{h.num_habi}}" class="btn btn-warning btn-sm "> <i class="bi bi-pencil"></i></a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -87,8 +87,8 @@
                                     <td>{{ h.correo }}</td>
                                     <td>{{ h.num_telefono }}</td>
                                     <td>{{ h.residencia }}</td>
-                                    <td><a href="/eliminarHuesped/{{h.rut}}" class="btn btn-danger btn-sm "> <i class="bi bi-trash"></i></a></td>
-                                    <td><a href="/editarHuesped/{{h.rut}}" class="btn btn-warning btn-sm " onclick= return confirm('¿Desea Eliminar el Huesped?') > <i class="bi bi-pencil"></i></a></td>
+                                    <td><a href="/eliminarHuesped/{{h.rut}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar el Huesped?')"> <i class="bi bi-trash"></i></a></td>
+                                    <td><a href="/editarHuesped/{{h.rut}}" class="btn btn-warning btn-sm " > <i class="bi bi-pencil"></i></a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -125,8 +125,8 @@
                                     <td>{{ h.num_habi }}</td>
                                     <td>{{ h.fechaIngreso }}</td>
                                     <td>{{ h.fechaSalida }}</td>
-                                    <td><a href="/eliminarReserva/{{h.id_reserva}}" class="btn btn-danger btn-sm "> <i class="bi bi-trash"></i></a></td>
-                                    <td><a href="/editarReserva/{{h.id_reserva}}" class="btn btn-warning btn-sm " onclick= return confirm('¿Desea Eliminar la Rerserva?')> <i class="bi bi-pencil"></i></a></td>
+                                    <td><a href="/eliminarReserva/{{h.id_reserva}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar la Rerserva?')"> <i class="bi bi-trash"></i></a></td>
+                                    <td><a href="/editarReserva/{{h.id_reserva}}" class="btn btn-warning btn-sm "> <i class="bi bi-pencil"></i></a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -162,8 +162,8 @@
                                     <td>{{ h.apellidos }}</td>
                                     <td>{{ h.estado }}</td>
                                     <td>{{ h.cargo }}</td>
-                                    <td><a href="/eliminarUsuario/{{h.rut_usu}}" class="btn btn-danger btn-sm "> <i class="bi bi-trash"></i></a></td>
-                                    <td><a href="/editarUsuario/{{h.rut_usu}}" class="btn btn-warning btn-sm " onclick= return confirm('¿Desea Eliminar el Usuario?')> <i class="bi bi-pencil"></i></a></td>
+                                    <td><a href="/eliminarUsuario/{{h.rut_usu}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar el Usuario?')"> <i class="bi bi-trash"></i></a></td>
+                                    <td><a href="/editarUsuario/{{h.rut_usu}}" class="btn btn-warning btn-sm "> <i class="bi bi-pencil"></i></a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>

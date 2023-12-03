@@ -55,5 +55,8 @@ class Reservas(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete = models.PROTECT,verbose_name="Usuario")
     checkout_realizado = models.BooleanField(default=False)
     
-    def __str__(self):
+    def rese_rut(self):
         return f"Reserva {self.id_reserva} - {self.rut}"
+    
+    def __srt__(self):
+        return self.id_reserva

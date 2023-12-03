@@ -59,10 +59,10 @@ class regihues(forms.ModelForm):
 class reservar(forms.ModelForm):
     class Meta:
         model = Reservas
-        fields = ['rut', 'num_habi', 'fechaIngreso', 'fechaSalida']
+        fields = ['rut_huesped', 'num_habitacion', 'fechaIngreso', 'fechaSalida']
         widgets = {
-            'rut': forms.TextInput(attrs={'class': 'form-control'}),
-            'num_habi': forms.Select(attrs={'class': 'form-control'}),
+            'rut_huesped': forms.TextInput(attrs={'class': 'form-control'}),
+            'num_habitacion': forms.Select(attrs={'class': 'form-control'}),
             'fechaIngreso': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'fechaSalida': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
         }

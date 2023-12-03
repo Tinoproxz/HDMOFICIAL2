@@ -16,8 +16,8 @@ urlpatterns = [
 
     # RESERVA
     path('reserva/',views.reservas),
-    path('eliminarHuesped/<int:rut>',views.eliminarReserva),
-    path('editarHuesped/<int:rut>', views.editarReserva),
+    path('eliminarReserva/<int:id_reserva>',views.eliminarReserva),
+    path('editarReserva/<int:id_reserva>', views.editarReserva),
 
     # ADMINISTRADOR
     path('usuario/',views.usuario),

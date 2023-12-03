@@ -28,11 +28,11 @@ class Habitaciones(models.Model):
     capacidad = models.CharField(max_length=30,choices=CAPACIDAD)
 
     def __str__(self):
-        return str(self.num_habi) + ' ( Capacidad: ' + self.capacidad + ' /  Orientacion: '+ self.orientacion +' ) '
+        return str(self.num_habi) + ' ( Capacidad: ' + self.capacidad + ' /  Estado: '+ self.estado +' ) '
         
 
 class Huespedes(models.Model):
-    rut = models.CharField(primary_key=True,max_length=12,validators=[validators.MinLengthValidator(9), validators.MaxLengthValidator(12)])
+    rut = models.CharField(primary_key=True,max_length=12,validators=[validators.MinLengthValidator(8), validators.MaxLengthValidator(12)])
     nombre = models.CharField(max_length=80,validators=[validators.MinLengthValidator(1), validators.MaxLengthValidator(80)])
     apellidos = models.CharField(max_length=80,validators=[validators.MinLengthValidator(1), validators.MaxLengthValidator(80)])
     correo = models.EmailField()
@@ -41,9 +41,13 @@ class Huespedes(models.Model):
 
 class Reservas(models.Model):
     id_reserva = models.AutoField(primary_key=True)
-    rut = models.ForeignKey(Huespedes, on_delete = models.SET_NULL, null = True, verbose_name="Rut Huesped")
-    fechaReserva = models.DateTimeField(auto_now_add=True,verbose_name="Fecha Reserva")
-    num_habi = models.ForeignKey(Habitaciones, on_delete = models.SET_NULL, null = True,verbose_name="Numero Habitacion")
+    rut_huesped = models.ForeignKey(Huespedes, on_delete = models.PROTECT, null = True, verbose_name="Rut Huesped")
+    fechaReserva = models.DateTimeField(verbose_name="Fecha Reserva")
+    num_habitacion = models.ForeignKey(Habitaciones, on_delete = models.PROTECT, null = True,verbose_name="Numero Habitacion")
     fechaIngreso = models.DateField(verbose_name="Ingreso")
     fechaSalida = models.DateField(verbose_name="Salida")
-    rut_usu = models.ForeignKey(Usuario, on_delete = models.SET_NULL, null = True,verbose_name="Usuario")
+    usuario = models.ForeignKey(Usuario, on_delete = models.PROTECT,verbose_name="Usuario")
+    checkout_realizado = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"Reserva {self.id_reserva} - {self.rut}"

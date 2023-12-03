@@ -120,11 +120,12 @@
                             {% for h in data3 %}
                                 <tr>
                                     <td>{{ h.id_reserva }}</td>
-                                    <td>{{ h.rut }}</td>
+                                    <td>{{ h.rut_huesped }}</td>
                                     <td>{{ h.fechaReserva }}</td>
-                                    <td>{{ h.num_habi }}</td>
+                                    <td>{{ h.num_habitacion }}</td>
                                     <td>{{ h.fechaIngreso }}</td>
                                     <td>{{ h.fechaSalida }}</td>
+                                    <td>{{ h.usuario }}</td>
                                     <td><a href="/eliminarReserva/{{h.id_reserva}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar la Rerserva?')"> <i class="bi bi-trash"></i></a></td>
                                     <td><a href="/editarReserva/{{h.id_reserva}}" class="btn btn-warning btn-sm "> <i class="bi bi-pencil"></i></a></td>
                                 </tr>

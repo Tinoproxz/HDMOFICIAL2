@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render, redirect
 from .models import Habitaciones, Usuario,Huespedes,Reservas
 from .forms import inicioSesion,regihabi,regihues,regiusu,reservar
@@ -146,7 +147,7 @@ def editarHuesped(request, rut):
 
 
 #LEER Y AGREGAR RESERVAS
-def reservas(request):
+"""def reservas(request):
     rut_usu = rut_usuform
     rese = Reservas.objects.all()
     form = reservar()
@@ -168,17 +169,67 @@ def reservas(request):
 
     data = {'data3': rese, 'tabla': 'Reservas', 'formu': form, 'rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
     messages.success(request, '¡Reservas listadas!')
+    return render(request, "gestion.html", data)"""
+
+def reservas(request):
+    rese = Reservas.objects.all()
+    forms = reservar()
+
+    if request.method == 'POST':
+        form = reservar(request.POST)
+        if form.is_valid():
+            # Procesar el formulario y crear la reserva
+            fechaReserva = datetime.now()
+            rut = form.cleaned_data['rut_huesped']
+            habitacion_obj = form.cleaned_data['num_habitacion']
+            fechaIngreso = form.cleaned_data['fechaIngreso']
+            fechaSalida = form.cleaned_data['fechaSalida']
+
+            # Obtener la instancia de la habitación
+            habitacion = Habitaciones.objects.get(num_habi=habitacion_obj.num_habi)
+
+            # Verificar si la habitación está disponible
+            if habitacion.estado == 'disponible':
+                # Obtener usuario 
+                usuario = Usuario.objects.get(rut_usu=rut_usuform)
+
+                # Crear la reserva
+                reserva = Reservas.objects.create(
+                    fechaReserva=fechaReserva,
+                    rut_huesped=rut,
+                    num_habitacion=habitacion,
+                    fechaIngreso=fechaIngreso,
+                    fechaSalida=fechaSalida,
+                    usuario=usuario  # Asignar la instancia del usuario
+                )
+                reserva.save()
+
+                # Marcar la habitación como no disponible
+                habitacion.estado = 'no disponible'
+                habitacion.save()
+
+                messages.success(request, '¡Reserva creada con éxito!')
+                return redirect('/reserva') 
+            else:
+                messages.error(request, 'La habitación no está disponible en las fechas seleccionadas.')
+    else:
+        form = reservar()
+
+    data = {'data3': rese, 'tabla': 'Reservas', 'formu': forms, 'rut_usu': rut_usuform, 'cargo': 'encargado', 'link': "/encargado"}
+    messages.success(request, '¡Reservas listadas!')
     return render(request, "gestion.html", data)
 
+
+
 #ELIMINAR RESERVAS
-def eliminarReserva(request,id):
-    rese = Reservas.objects.get(id=id)
+def eliminarReserva(request,id_reserva):
+    rese = Reservas.objects.get(id_reserva=id_reserva)
     rese.delete()
     return redirect('/reserva')
 
 #EDITAR RESERVAS
-def editarReserva(request, id):
-    rese = Reservas.objects.get(id=id)
+def editarReserva(request, id_reserva):
+    rese = Reservas.objects.get(id_reserva=id_reserva)
     form = reservar(instance=rese)
     if request.method == 'POST':
         form = reservar(request.POST, instance=rese)

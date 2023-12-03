@@ -15,6 +15,9 @@ class Usuario(models.Model):
     password = models.CharField(max_length=30)
     estado = models.CharField(max_length=15,choices=ESTADOS)
 
+    def __str__(self):
+        return self.rut_usu
+
 class Habitaciones(models.Model):
     ESTADOS=[('disponible', 'Disponible'),('no disponible', 'No Disponible'),('mantencion','En Mantencion'),]
     ORIENTACION=[('norte', 'Norte'),('sur', 'Sur'),('este','Este'),('oeste','Oeste'),]

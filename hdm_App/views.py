@@ -2,7 +2,6 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from .models import Habitaciones, Usuario,Huespedes,Reservas
 from .forms import inicioSesion,regihabi,regihues,regiusu,reservar
-from django.contrib import messages
 from . import forms
 
 # Create your views here.
@@ -200,23 +199,20 @@ def reservas(request):
                     num_habitacion=habitacion,
                     fechaIngreso=fechaIngreso,
                     fechaSalida=fechaSalida,
-                    usuario=usuario  # Asignar la instancia del usuario
+                    usuario=usuario
                 )
                 reserva.save()
 
-                # Marcar la habitación como no disponible
+                # Marca la habitación como no disponible
                 habitacion.estado = 'no disponible'
                 habitacion.save()
-
-                messages.success(request, '¡Reserva creada con éxito!')
                 return redirect('/reserva') 
             else:
-                messages.error(request, 'La habitación no está disponible en las fechas seleccionadas.')
+                print ('La habitación no está disponible en las fechas seleccionadas.')
     else:
         form = reservar()
 
     data = {'data3': rese, 'tabla': 'Reservas', 'formu': forms, 'rut_usu': rut_usuform, 'cargo': 'encargado', 'link': "/encargado"}
-    messages.success(request, '¡Reservas listadas!')
     return render(request, "gestion.html", data)
 
 

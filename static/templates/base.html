@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-info">
+    <nav class="navbar navbar-expand-lg navbar-light bg-warning">
         <a class="navbar-brand" href="#">Hotel Duerme Bien</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,7 +23,7 @@
                     <a class="nav-link" href={{link}}>Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/usuarios">Contacto</a>
+                    <a class="nav-link" href="#">Contacto</a>
                 </li>
             </ul>
         </div>
@@ -61,21 +61,19 @@
 
     </nav>
 
-    <div class="container mt-5 ">
+    <div class="container-fluid">
         {% block body %}
 
         {% endblock %}
     </div>
     {% if cargo == 'administrador' %}
         <body>
-            xedddddd
             
         </body>
 
     {% elif cargo == 'encargado' %}
         <body>
-            hola emcargado  
-                
+
         </body>
 
     {% endif %}

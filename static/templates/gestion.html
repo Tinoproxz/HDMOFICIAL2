@@ -5,10 +5,11 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row">
+    <div class="row py-2 ml-2" >
         <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-            <center><h3 class="alert alert-warning">Agregar {{tabla}}</h3></center>
-            <br>
+            <div style="width: 22rem;">
+                <center><h3 class="alert alert-warning">Agregar {{tabla}}</h3></center>
+            </div>
             <form method="POST">
                 <div class="card" style="width: 22rem;">
                     <div class="card-body text-center">
@@ -25,11 +26,11 @@
         </div>
 
         {% if tabla == 'Habitaciones' %}
-        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8 ">
-            <h3 class="alert alert-success">Listado de Habitaciones</h3>
+        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+            <center><h3 class="alert alert-success">Listado de Habitaciones</h3></center>
             {% if data1 %}
-                <div class="table-responsive py-2">
-                    <table class="table table-striped">
+                <div class="table-responsive">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>N. Habitacion</th>
@@ -40,7 +41,7 @@
                                 <th colspan="2">Opciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                             {% for h in data1 %}
                                 <tr>
                                     <td>{{ h.num_habi }}</td>
@@ -62,12 +63,11 @@
         {% elif tabla == 'Huespedes' %}
         <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
             {% if data2 %}
-                <h3 class="alert alert-success">Listado de Huespedes</h3>
+            <center><h3 class="alert alert-success">Listado de Huespedes</h3></center>
                 <div class="table-responsive py-2">
-                    <table class="table table-striped">
+                    <table class="table table-sm" >
                         <thead>
                             <tr>
-                                <th>#</th>
                                 <th>Rut</th>
                                 <th>Nombre</th>
                                 <th>Apellidos</th>
@@ -77,10 +77,9 @@
                                 <th colspan="2">Opciones</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody >
                             {% for h in data2 %}
                                 <tr>
-                                    <td>{{ forloop.counter }}</td>
                                     <td>{{ h.rut }}</td>
                                     <td>{{ h.nombre }}</td>
                                     <td>{{ h.apellidos }}</td>
@@ -101,7 +100,7 @@
         {% elif tabla == 'Reservas' %}
         <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
             {% if data3 %}
-                <h3 class="alert alert-success">Listado de Reservas</h3>
+            <center><h3 class="alert alert-success">Listado de Reservas</h3></center>
                 <div class="table-responsive py-2">
                     <table class="table table-striped">
                         <thead>
@@ -140,9 +139,9 @@
         {% elif tabla == 'Usuarios' %}
         <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
             {% if data4 %}
-                <h3 class="alert alert-success">Listado de Usuarios</h3>
+            <center><h3 class="alert alert-success">Listado de Usuarios</h3></center>
                 <div class="table-responsive py-2">
-                    <table class="table table-striped">
+                    <table class="table table-sm">
                         <thead>
                             <tr>
                                 <th>#</th>

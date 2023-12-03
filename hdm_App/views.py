@@ -146,30 +146,6 @@ def editarHuesped(request, rut):
 
 
 #LEER Y AGREGAR RESERVAS
-"""def reservas(request):
-    rut_usu = rut_usuform
-    rese = Reservas.objects.all()
-    form = reservar()
-
-    if request.method == 'POST':
-        form = reservar(request.POST)
-        if form.is_valid():
-            rutform = form.cleaned_data['rut']
-            # Verificar si el RUT existe en la tabla de Huéspedes
-            huespedex = Huespedes.objects.filter(rut=rutform).exists()
-
-            # Asignar el valor de rut_usuform al campo correspondiente del modelo Reservas
-            if huespedex:
-                Reservas()
-                reserva = form.save(commit=False)  # No guardar el formulario aún
-                reserva = reserva.rut = rut_usu
-                reserva.save()  # Ahora sí, guardar la reserva en la base de datos
-        return redirect('/reserva') 
-
-    data = {'data3': rese, 'tabla': 'Reservas', 'formu': form, 'rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
-    messages.success(request, '¡Reservas listadas!')
-    return render(request, "gestion.html", data)"""
-
 def reservas(request):
     rese = Reservas.objects.all()
     forms = reservar()
@@ -177,19 +153,22 @@ def reservas(request):
     if request.method == 'POST':
         form = reservar(request.POST)
         if form.is_valid():
-            # Procesar el formulario y crear la reserva
             fechaReserva = datetime.now()
             rut = form.cleaned_data['rut_huesped']
             habitacion_obj = form.cleaned_data['num_habitacion']
             fechaIngreso = form.cleaned_data['fechaIngreso']
             fechaSalida = form.cleaned_data['fechaSalida']
 
+            # Verificar si el RUT del huésped existe en la tabla Huespedes
+            if not Huespedes.objects.filter(rut=rut).exists():
+                print ('El RUT del huésped no existe en la base de datos.')
+                return redirect('/reserva')
+
             # Obtener la instancia de la habitación
             habitacion = Habitaciones.objects.get(num_habi=habitacion_obj.num_habi)
 
             # Verificar si la habitación está disponible
             if habitacion.estado == 'disponible':
-                # Obtener usuario 
                 usuario = Usuario.objects.get(rut_usu=rut_usuform)
 
                 # Crear la reserva
@@ -202,13 +181,9 @@ def reservas(request):
                     usuario=usuario
                 )
                 reserva.save()
-
-                # Marca la habitación como no disponible
-                habitacion.estado = 'no disponible'
-                habitacion.save()
                 return redirect('/reserva') 
             else:
-                print ('La habitación no está disponible en las fechas seleccionadas.')
+                print('La habitación no está disponible en las fechas seleccionadas.')
     else:
         form = reservar()
 

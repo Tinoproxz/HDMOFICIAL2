@@ -41,6 +41,9 @@ class Huespedes(models.Model):
     correo = models.EmailField()
     num_telefono = models.CharField(max_length=12,validators=[validators.MaxLengthValidator(12), validators.MinLengthValidator(9)],verbose_name="Numero Telefono")
     residencia = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.rut
 
 class Reservas(models.Model):
     id_reserva = models.AutoField(primary_key=True)

@@ -3,37 +3,39 @@
 {% block title %} Inicio Sesion HDM {% endblock %}
 
 {% block body %}
-<center><h1 class="alert alert-info">INICIO DE SESION HOTEL DUERME BIEN</h1></center>
-<!-- SI LLEGA EL VALOR R SE DESPLEGARA LA SIGUIENTE ESTRUCTURA -->
-{% if r %}
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-    <h5>{{r}}</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endif %}
-<!-- SI LLEGA EL VALOR R2 SE DESPLEGARA LA SIGUIENTE ESTRUCTURA -->
-{% if r2 %}
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-    <h5>{{r2}}</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endif %}
-<form method="POST">
-    <div class="row">
-        <div class="col-md-6 mx-auto">
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <center><h1 class="alert alert-info">INICIO DE SESION HOTEL DUERME BIEN</h1></center>
+
+        <!-- SI LLEGA EL VALOR R SE DESPLEGARA LA SIGUIENTE ESTRUCTURA -->
+        {% if r %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <h5>{{r}}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <!-- SI LLEGA EL VALOR R2 SE DESPLEGARA LA SIGUIENTE ESTRUCTURA -->
+        {% if r2 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <h5>{{r2}}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
             <div class="card">
                 <div class="card-body text-center">
                     <!-- DEPENDIENDO DE LA VISTA QUE SE DESPLIEGUE SE CARGARA EL FORMULARIO -->
-                    {% csrf_token %}
                     {{ formulario }}
                     <br>
                     <div class="d-grid gap-2">
                         <input class="btn btn-warning rounded-pill" type="submit" value="{{nboton}}">
-                    </div>        
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
-    
-</form>
+</div>
 {% endblock %}

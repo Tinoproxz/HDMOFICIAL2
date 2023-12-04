@@ -1,7 +1,7 @@
 {% extends "./base.html" %}
 
 {% block title %} 
-    {{ tabla }}
+    {{ cargo }}
 {% endblock %}
 
 {% block body %}
@@ -11,9 +11,32 @@
     </body>
 
     {% elif cargo == 'encargado' %}
-    <section >
-        
-    </section>
+    <body>
+        <div class="row py-2 ml-2 m-2">
+            <!--style="background: url(/static/img/fondo.jpg); background-size:cover;">  -->
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                <div style="width: 22rem;">
+                    <center><h3 class="alert alert-warning">PRECIOS DE HABITACIONES</h3></center>
+                </div>
+                <div class="card" style="width: 22rem;">
+                    <img src="/static/img/habitacion.jpg" class="card-img-top" alt="...">
+                    <div class="card-body text-center">
+                        <p class="card-text">2 PERSONAS = $25.000</p>
+                        <p class="card-text">4 PERSONAS = $40.000</p>
+                        <p class="card-text">6 PERSONAS = $75.000</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
+                <center><h3 class="alert alert-success">ESTADO HABITACIONES</h3></center>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            AQUI IRAN CARDS CON HABITACIONES ACTIVAS
+                        </table>
+                    </div>
+            </div>
+        </div>       
+    </body>
 
     {% endif %}
 

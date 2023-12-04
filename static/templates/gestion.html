@@ -101,7 +101,7 @@
         <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
             {% if data3 %}
             <center><h3 class="alert alert-success">Listado de Reservas</h3></center>
-                <div class="table-responsive py-2">
+                <div class="table-responsive py-2 ">
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -111,6 +111,8 @@
                                 <th>N.Habitacion</th>
                                 <th>F.Ingreso</th>
                                 <th>F.Salida</th>
+                                <th>T.Pagar</th>
+                                <th>Estado</th>
                                 <th>Usuario</th>
                                 <th colspan="2">Opciones</th>
                             </tr>
@@ -124,6 +126,8 @@
                                     <td>{{ h.num_habitacion }}</td>
                                     <td>{{ h.fechaIngreso }}</td>
                                     <td>{{ h.fechaSalida }}</td>
+                                    <td>{{ h.totalpagar }}</td>
+                                    <td>{{ h.estado }}</td>
                                     <td>{{ h.usuario }}</td>
                                     <td><a href="/eliminarReserva/{{h.id_reserva}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar la Rerserva?')"> <i class="bi bi-trash"></i></a></td>
                                     <td><a href="/editarReserva/{{h.id_reserva}}" class="btn btn-warning btn-sm "> <i class="bi bi-pencil"></i></a></td>

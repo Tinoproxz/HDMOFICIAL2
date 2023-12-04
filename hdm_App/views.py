@@ -2,7 +2,6 @@ from datetime import datetime
 from django.shortcuts import render, redirect
 from .models import Habitaciones, Usuario,Huespedes,Reservas
 from .forms import inicioSesion,regihabi,regihues,regiusu,reservar
-from . import forms
 from django.contrib import messages
 # Create your views here.
 
@@ -20,14 +19,14 @@ def iniSesion(request):
 
                 if userDB.exists():
                     request.session['rut_usuform'] = rut_usuform
-                    # Obtiene el primer usuario encontrado
+                    # Obtiene el usuario encontrado
                     user = userDB.first()
                     
-                    # Redirige a diferentes menús según el tipo de usuario
+                    # Redirige a diferentes menus segun el tipo de cargo
                     if user.cargo == 'encargado':
-                        return redirect('encargado/')  # Ajusta el nombre de la URL según tu configuración
+                        return redirect('encargado/')  
                     elif user.cargo == 'administrador':
-                        return redirect('administrador/')  # Ajusta el nombre de la URL según tu configuración
+                        return redirect('administrador/') 
                 else:
                     messages.error(request, 'Usuario no activo o credenciales incorrectas.')
         else:
@@ -35,13 +34,11 @@ def iniSesion(request):
             data = {"formulario": form, "titulo": "Inicio Sesión Hotel Duerme Bien", 'nboton': 'Iniciar Sesion'}
             return render(request, 'inisesion.html', data)
     except Exception as e:
-        # Manejo de errores
         messages.error(request, f'Error: {str(e)}')
     
     data = {"formulario": form, "titulo": "Inicio Sesión Hotel Duerme Bien", 'nboton': 'Iniciar Sesion'}
     return render(request, 'inisesion.html', data)
     
-
 
 #VISTAS ADMINISTRADOR
 def encargado(request):
@@ -77,7 +74,7 @@ def editarUsuario(request, rut_usu):
         if form.is_valid():
             form.save()
             print("actualizado")
-        return redirect('/usuario')   # Redirige a la vista de listar después de la edición exitosa
+        return redirect('/usuario')   
     data = {'tabla': 'Usuarios','formu': form, 'volver':'/usuario','rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
     return render(request,'edicion.html',data)
 
@@ -113,7 +110,7 @@ def editarHabitacion(request, num_habi):
         if form.is_valid():
             print("actualizado")
             form.save()
-        return redirect('/habitacion')   # Redirige a la vista de listar después de la edición exitosa
+        return redirect('/habitacion')   
     data = {'tabla': 'Habitaciones','formu': form, 'volver':'/habitacion','rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
     return render(request,'edicion.html',data)
 
@@ -146,10 +143,9 @@ def editarHuesped(request, rut):
         if form.is_valid():
             print("actualizado")
             form.save()
-        return redirect('/huesped')   # Redirige a la vista de listar después de la edición exitosa
+        return redirect('/huesped')
     data = {'tabla': 'Huespedes','formu': form, 'volver':'/huesped', 'rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
     return render(request,'edicion.html',data)
-
 
 
 #LEER Y AGREGAR RESERVAS
@@ -160,7 +156,6 @@ def reservas(request):
     if request.method == 'POST':
         form = reservar(request.POST)
         if form.is_valid():
-            fechaReserva = datetime.now()
             rut = form.cleaned_data['rut_huesped']
             habitacion_obj = form.cleaned_data['num_habitacion']
             fechaIngreso = form.cleaned_data['fechaIngreso']
@@ -168,7 +163,7 @@ def reservas(request):
 
             # Verificar si el RUT del huésped existe en la tabla Huespedes
             if not Huespedes.objects.filter(rut=rut).exists():
-                print ('El RUT del huésped no existe en la base de datos.')
+                messages.error(request, 'El RUT del huésped no existe en la base de datos.')
                 return redirect('/reserva')
 
             # Obtener la instancia de la habitación
@@ -180,24 +175,21 @@ def reservas(request):
 
                 # Crear la reserva
                 reserva = Reservas.objects.create(
-                    fechaReserva=fechaReserva,
                     rut_huesped=rut,
                     num_habitacion=habitacion,
                     fechaIngreso=fechaIngreso,
                     fechaSalida=fechaSalida,
                     usuario=usuario
                 )
-                reserva.save()
+
                 return redirect('/reserva') 
             else:
-                print('La habitación no está disponible en las fechas seleccionadas.')
+                messages.error(request, 'La habitación no está disponible en las fechas seleccionadas.')
     else:
         form = reservar()
 
     data = {'data3': rese, 'tabla': 'Reservas', 'formu': forms, 'rut_usu': rut_usuform, 'cargo': 'encargado', 'link': "/encargado"}
     return render(request, "gestion.html", data)
-
-
 
 #ELIMINAR RESERVAS
 def eliminarReserva(request,id_reserva):
@@ -214,6 +206,6 @@ def editarReserva(request, id_reserva):
         if form.is_valid():
             print("actualizado")
             form.save()
-        return redirect('/reserva')   # Redirige a la vista de listar después de la edición exitosa
+        return redirect('/reserva')
     data = {'tabla': 'Reservas','formu': form, 'volver':'/reserva','rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
     return render(request,'edicion.html',data)

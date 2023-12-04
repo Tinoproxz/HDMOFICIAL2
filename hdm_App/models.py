@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 from django.core import validators
 
@@ -45,18 +46,39 @@ class Huespedes(models.Model):
     def __str__(self):
         return self.rut
 
+
 class Reservas(models.Model):
+    ESTADOS = [
+        ('ACTIVA', 'ACTIVA'),
+        ('INACTIVA', 'INACTIVA'),
+        ('CANCELADA', 'CANCELADA'),
+    ]
+
     id_reserva = models.AutoField(primary_key=True)
-    rut_huesped = models.ForeignKey(Huespedes, on_delete = models.PROTECT, null = True, verbose_name="Rut Huesped")
-    fechaReserva = models.DateTimeField(verbose_name="Fecha Reserva")
-    num_habitacion = models.ForeignKey(Habitaciones, on_delete = models.PROTECT, null = True,verbose_name="Numero Habitacion")
+    rut_huesped = models.ForeignKey(Huespedes, on_delete=models.PROTECT, null=True, verbose_name="Rut Huesped")
+    fechaReserva = models.DateTimeField(verbose_name="Fecha Reserva", auto_now_add=True)
+    num_habitacion = models.ForeignKey(Habitaciones, on_delete=models.PROTECT, null=True, verbose_name="Numero Habitacion")
     fechaIngreso = models.DateField(verbose_name="Ingreso")
     fechaSalida = models.DateField(verbose_name="Salida")
-    usuario = models.ForeignKey(Usuario, on_delete = models.PROTECT,verbose_name="Usuario")
     checkout_realizado = models.BooleanField(default=False)
-    
+    estado = models.CharField(max_length=30, choices=ESTADOS)
+    totalpagar = models.DecimalField(max_digits=10, decimal_places=3)
+    usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT, verbose_name="Usuario")
+
     def rese_rut(self):
-        return f"Reserva {self.id_reserva} - {self.rut}"
+        return f"Reserva {self.id_reserva} - {self.rut_huesped}"
+
+    def calcular_total_pagar(self):
+        dias_estadia = (self.fechaSalida - self.fechaIngreso).days
+        precio_habitacion = Decimal(self.num_habitacion.prec_habi) if self.num_habitacion else Decimal('0.0')
+        total_pagar = dias_estadia * precio_habitacion
+        return total_pagar
+
+    def save(self, *args, **kwargs):
+        # Antes de guardar, calcular y asignar el total a pagar
+        self.totalpagar = self.calcular_total_pagar()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.id_reserva)
     
-    def __srt__(self):
-        return self.id_reserva

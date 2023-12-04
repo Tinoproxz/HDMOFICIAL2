@@ -4,7 +4,7 @@ from .models import Usuario,Habitaciones,Reservas,Huespedes
 
 @admin.register(Usuario)
 class UsuarioAdmin(admin.ModelAdmin):
-    list_display=('rut_usu','mayunombre','cargo','estado')
+    list_display=('rut_usu','mayunombre','cargo','password','estado',)
     #ordering = ('rut_usu','nombre')
     search_fields = ('nombre','rut_usu')
     #list_editable = ('nombre',)

@@ -3,6 +3,16 @@
 {% block title %} Inicio Sesión HDM {% endblock %}
 
 {% block body %}
+
+    {% if messages %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        {% for message in messages %}
+            alert("{{ message }}");
+        {% endfor %}
+        });
+    </script>
+    {% endif %}
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3 mt-5">

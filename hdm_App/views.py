@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from .models import Habitaciones, Usuario,Huespedes,Reservas
 from .forms import inicioSesion,regihabi,regihues,regiusu,reservar
 from . import forms
-
+from django.contrib import messages
 # Create your views here.
+
 def iniSesion(request):
     try:
         if request.method == 'POST':
@@ -15,24 +16,30 @@ def iniSesion(request):
                 password = form.cleaned_data['password']
 
                 # Verifica si el usuario y la contraseña coinciden en la base de datos
-                userDB = Usuario.objects.filter(rut_usu=rut_usuform, password=password)
+                userDB = Usuario.objects.filter(rut_usu=rut_usuform, password=password, estado='activo')
 
                 if userDB.exists():
                     request.session['rut_usuform'] = rut_usuform
                     # Obtiene el primer usuario encontrado
                     user = userDB.first()
-                    # Redirige a diferentes menus según el tipo de usuario
+                    
+                    # Redirige a diferentes menús según el tipo de usuario
                     if user.cargo == 'encargado':
-                        return redirect('encargado/')  # Ajusta el nombre de la URL segun tu configuración
+                        return redirect('encargado/')  # Ajusta el nombre de la URL según tu configuración
                     elif user.cargo == 'administrador':
-                        return redirect('administrador/')  # Ajusta el nombre de la URL segun tu configuración
+                        return redirect('administrador/')  # Ajusta el nombre de la URL según tu configuración
+                else:
+                    messages.error(request, 'Usuario no activo o credenciales incorrectas.')
         else:
             form = inicioSesion()
-            data = {"formulario": form,"titulo":"Inicio Sesión Hotel Duerme Bien",'nboton':'Iniciar Sesion'}
+            data = {"formulario": form, "titulo": "Inicio Sesión Hotel Duerme Bien", 'nboton': 'Iniciar Sesion'}
             return render(request, 'inisesion.html', data)
-    except:
-        data = {'r2': 'USUARIO O CONTRASEÑA INCORRECTOS',"formulario": form,"titulo":"Inicio Sesión Hotel Duerme Bien",'nboton':'Iniciar Sesion'}
-        return render(request, 'inisesion.html', data)
+    except Exception as e:
+        # Manejo de errores
+        messages.error(request, f'Error: {str(e)}')
+    
+    data = {"formulario": form, "titulo": "Inicio Sesión Hotel Duerme Bien", 'nboton': 'Iniciar Sesion'}
+    return render(request, 'inisesion.html', data)
     
 
 

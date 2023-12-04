@@ -43,11 +43,11 @@ def iniSesion(request):
 #VISTAS ADMINISTRADOR
 def encargado(request):
     data ={'cargo' : 'encargado','rut_usu': rut_usuform,'title':'Encargado HDM'}
-    return render(request,"base.html",data)
+    return render(request,"mains.html",data)
 
 def administrador(request):
     data ={'cargo' : 'administrador','rut_usu': rut_usuform,'title':'Administrador HDM'}
-    return render(request,"base.html",data)
+    return render(request,"mains.html",data)
 
 def usuario(request):
     admin = Usuario.objects.all()

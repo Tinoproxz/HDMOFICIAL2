@@ -1,0 +1,20 @@
+{% extends "./base.html" %}
+
+{% block title %} 
+    {{ tabla }}
+{% endblock %}
+
+{% block body %}
+    {% if cargo == 'administrador' %}
+    <body>
+        hola admin
+    </body>
+
+    {% elif cargo == 'encargado' %}
+    <section >
+        
+    </section>
+
+    {% endif %}
+
+{% endblock %}

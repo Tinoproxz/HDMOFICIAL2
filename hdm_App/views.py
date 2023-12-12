@@ -139,6 +139,7 @@ def editarHuesped(request, rut):
     hues = Huespedes.objects.get(rut=rut)
     form = regihues(instance=hues)
     if request.method == 'POST':
+        print("dentro del formulario")
         form = regihabi(request.POST, instance=hues)
         if form.is_valid():
             print("actualizado")

@@ -10,9 +10,9 @@ urlpatterns = [
     path('editarHabitacion/<int:num_habi>', views.editarHabitacion),
 
     # HUESPED
-    path('huesped/',views.huespedes),
-    path('eliminarHuesped/<int:rut>',views.eliminarHuesped),
-    path('editarHuesped/<int:rut>', views.editarHuesped),
+    path('huesped/', views.huespedes),
+    path('eliminarHuesped/<str:rut>/', views.eliminarHuesped),
+    path('editarHuesped/<str:rut>/', views.editarHuesped),
 
     # RESERVA
     path('reserva/',views.reservas),

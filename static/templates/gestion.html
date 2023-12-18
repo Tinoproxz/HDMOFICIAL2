@@ -1,182 +1,366 @@
 {% extends "./base.html" %}
 
-{% block title %} 
-    {{ tabla }}
+{% block title %}
+{{ tabla }}
 {% endblock %}
 
 {% block body %}
-    <div class="row py-2 ml-2" >
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4">
-            <div style="width: 22rem;">
-                <center><h3 class="alert alert-warning">Agregar {{tabla}}</h3></center>
-            </div>
-            <form method="POST">
-                <div class="card" style="width: 22rem;">
-                    <div class="card-body text-center">
-                        <!-- DEPENDIENDO DE LA VISTA QUE SE DESPLIEGUE SE CARGARA EL FORMULARIO -->
-                        {% csrf_token %}
-                        {{ formu }}
-                        <br>
-                        <div class="d-grid gap-2">
-                            <button type="submit" method ="POST" class="btn btn-success text-white mx-auto d-block "><i class="bi bi-save"> Guardar</i></button>
-                        </div>        
+<div class="row">
+    <!-- Columna para agregar {{tabla}} -->
+    <div class="col-sm-2 col-md-2 col-lg-2 col-xl-2">
+        <center>
+            <h3 class="alert alert-warning">Agregar {{tabla}}</h3>
+        </center>
+        <form method="POST">
+            <div class="card">
+                <div class="card-body text-center">
+                    <!-- DEPENDIENDO DE LA VISTA QUE SE DESPLIEGUE SE CARGARA EL FORMULARIO -->
+                    {% csrf_token %}
+                    {{ formu }}
+                    <br>
+                    <div class="d-grid gap-2">
+                        <button type="submit" method="POST" class="btn btn-success text-white mx-auto d-block ">
+                            <i class="bi bi-save"> Guardar</i>
+                        </button>
                     </div>
                 </div>
-            </form>
+            </div>
+        </form>
+    </div>
+    {% if tabla == 'Habitaciones' %}
+    <div class="col-sm-8 col-md-6 col-lg-8 col-xl-8">
+        <center>
+            <h3 class="alert alert-success">Listado de Habitaciones</h3>
+        </center>
+        {% if data1 %}
+        <div class="table-responsive">
+            <table class="table table-active">
+                <thead>
+                    <tr>
+                        <th>N. Habitacion</th>
+                        <th>Estado</th>
+                        <th>Orientacion</th>
+                        <th>Precio</th>
+                        <th>Capacidad</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in data1 %}
+                    <tr>
+                        <td>{{ h.num_habi }}</td>
+                        <td>{{ h.estado }}</td>
+                        <td>{{ h.orientacion }}</td>
+                        <td>{{ h.prec_habi }}</td>
+                        <td>{{ h.capacidad }}</td>
+                        <td><a href="/eliminarHabitacion/{{h.num_habi}}" class="btn btn-danger btn-sm "
+                                onclick="return confirm('¿Desea Eliminar la Habitacion?')"> <i
+                                    class="bi bi-trash"></i></a></td>
+                        <td><a href="/editarHabitacion/{{h.num_habi}}" class="btn btn-warning btn-sm "> <i
+                                    class="bi bi-pencil"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-
-        {% if tabla == 'Habitaciones' %}
-        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
-            <center><h3 class="alert alert-success">Listado de Habitaciones</h3></center>
-            {% if data1 %}
-                <div class="table-responsive ">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>N. Habitacion</th>
-                                <th>Estado</th>
-                                <th>Orientacion</th>
-                                <th>Precio</th>
-                                <th>Capacidad</th>
-                                <th colspan="2">Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody >
-                            {% for h in data1 %}
-                                <tr>
-                                    <td>{{ h.num_habi }}</td>
-                                    <td>{{ h.estado }}</td>
-                                    <td>{{ h.orientacion }}</td>
-                                    <td>{{ h.prec_habi }}</td>
-                                    <td>{{ h.capacidad }}</td>
-                                    <td><a href="/eliminarHabitacion/{{h.num_habi}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar la Habitacion?')"> <i class="bi bi-trash"></i></a></td>
-                                    <td><a href="/editarHabitacion/{{h.num_habi}}" class="btn btn-warning btn-sm "> <i class="bi bi-pencil"></i></a></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p>NO HAY DATOS</p>
-            {% endif %}
-        </div>
-        {% elif tabla == 'Huespedes' %}
-        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
-            {% if data2 %}
-            <center><h3 class="alert alert-success">Listado de Huespedes</h3></center>
-                <div class="table-responsive py-2">
-                    <table class="table table-sm" >
-                        <thead>
-                            <tr>
-                                <th>Rut</th>
-                                <th>Nombre</th>
-                                <th>Apellidos</th>
-                                <th>Correo</th>
-                                <th>Numero Celular</th>
-                                <th>Residencia</th>
-                                <th colspan="2">Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody >
-                            {% for h in data2 %}
-                                <tr>
-                                    <td>{{ h.rut }}</td>
-                                    <td>{{ h.nombre }}</td>
-                                    <td>{{ h.apellidos }}</td>
-                                    <td>{{ h.correo }}</td>
-                                    <td>{{ h.num_telefono }}</td>
-                                    <td>{{ h.residencia }}</td>
-                                    <td><a href="/eliminarHuesped/{{h.rut}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar el Huesped?')"> <i class="bi bi-trash"></i></a></td>
-                                    <td><a href="/editarHuesped/{{h.rut}}" class="btn btn-warning btn-sm " > <i class="bi bi-pencil"></i></a></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p>NO HAY DATOS</p>
-            {% endif %}
-        </div>
-        {% elif tabla == 'Reservas' %}
-        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
-            {% if data3 %}
-            <center><h3 class="alert alert-success">Listado de Reservas</h3></center>
-                <div class="table-responsive py-2 bg-white">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Rut Huesped</th>
-                                <th>F.Rerserva</th>
-                                <th>N.Habitacion</th>
-                                <th>F.Ingreso</th>
-                                <th>F.Salida</th>
-                                <th>T.Pagar</th>
-                                <th>Estado</th>
-                                <th>Usuario</th>
-                                <th colspan="2">Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for h in data3 %}
-                                <tr>
-                                    <td>{{ h.id_reserva }}</td>
-                                    <td>{{ h.rut_huesped }}</td>
-                                    <td>{{ h.fechaReserva }}</td>
-                                    <td>{{ h.num_habitacion }}</td>
-                                    <td>{{ h.fechaIngreso }}</td>
-                                    <td>{{ h.fechaSalida }}</td>
-                                    <td>{{ h.totalpagar }}</td>
-                                    <td>{{ h.estado }}</td>
-                                    <td>{{ h.usuario }}</td>
-                                    <td><a href="/eliminarReserva/{{h.id_reserva}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar la Rerserva?')"> <i class="bi bi-trash"></i></a></td>
-                                    <td><a href="/editarReserva/{{h.id_reserva}}" class="btn btn-warning btn-sm "> <i class="bi bi-pencil"></i></a></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p>NO HAY DATOS</p>
-            {% endif %}
-        </div>
-        {% elif tabla == 'Usuarios' %}
-        <div class="col-sm-12 col-md-6 col-lg-8 col-xl-8">
-            {% if data4 %}
-            <center><h3 class="alert alert-success">Listado de Usuarios</h3></center>
-                <div class="table-responsive py-2">
-                    <table class="table table-sm">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Rut</th>
-                                <th>Nombre</th>
-                                <th>Apellidos</th>
-                                <th>Estado</th>
-                                <th>Cargo</th>
-                                <th colspan="2">Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for h in data4 %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ h.rut_usu }}</td>
-                                    <td>{{ h.nombre }}</td>
-                                    <td>{{ h.apellidos }}</td>
-                                    <td>{{ h.estado }}</td>
-                                    <td>{{ h.cargo }}</td>
-                                    <td><a href="/eliminarUsuario/{{h.rut_usu}}" class="btn btn-danger btn-sm " onclick= "return confirm('¿Desea Eliminar el Usuario?')"> <i class="bi bi-trash"></i></a></td>
-                                    <td><a href="/editarUsuario/{{h.rut_usu}}" class="btn btn-warning btn-sm "> <i class="bi bi-pencil"></i></a></td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% else %}
-                <p>NO HAY DATOS</p>
-            {% endif %}
-        </div>
+        {% else %}
+        <p>NO HAY DATOS</p>
         {% endif %}
     </div>
+
+    <!-- Columna para los filtros -->
+    <div class="col-sm-2 col-md-4 col-lg-2 col-xl-2">
+        <div id="changelist-filter">
+            <h3 class="alert alert-info text-center">Filtro</h3>
+            <div class="card">
+                <div class="card-body">
+                    <details data-filter-title="estado" open="">
+                        <summary>
+                            Por estado
+                        </summary>
+                        <ul>
+                            <li class="selected">
+                                <a href="?">Todo</a>
+                            </li>
+                            <li>
+                                <a href="?estado__exact=disponible">Disponible</a>
+                            </li>
+                            <li>
+                                <a href="?estado__exact=no+disponible">No Disponible</a>
+                            </li>
+                            <li>
+                                <a href="?estado__exact=mantencion">En Mantencion</a>
+                            </li>
+                        </ul>
+                    </details>
+    
+                    <details data-filter-title="Precio" open="">
+                        <summary>
+                            Por Precio
+                        </summary>
+                        <ul>
+                            <li class="selected">
+                                <a href="?">Todo</a>
+                            </li>
+                            <li>
+                                <a href="?prec_habi__exact=25.000">$25.000</a>
+                            </li>
+                            <li>
+                                <a href="?prec_habi__exact=40.000">$40.000</a>
+                            </li>
+                            <li>
+                                <a href="?prec_habi__exact=75.000">$75.000</a>
+                            </li>
+                        </ul>
+                    </details>
+    
+                    <details data-filter-title="capacidad" open="">
+                        <summary>
+                            Por capacidad
+                        </summary>
+                        <ul>
+                            <li class="selected">
+                                <a href="?">Todo</a>
+                            </li>
+                            <li>
+                                <a href="?capacidad__exact=2">2 Personas</a>
+                            </li>
+                            <li>
+                                <a href="?capacidad__exact=4">4 Personas</a>
+                            </li>
+                            <li>
+                                <a href="?capacidad__exact=6">6 Personas</a>
+                            </li>
+                        </ul>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% elif tabla == 'Huespedes' %}
+    <div class="col-sm-8 col-md-6 col-lg-8 col-xl-8">
+        {% if data2 %}
+        <center>
+            <h3 class="alert alert-success">Listado de Huespedes</h3>
+        </center>
+        <div class="table-responsive py-2">
+            <table class="table table-active">
+                <thead>
+                    <tr>
+                        <th>Rut</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Correo</th>
+                        <th>Numero Celular</th>
+                        <th>Residencia</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in data2 %}
+                    <tr>
+                        <td>{{ h.rut }}</td>
+                        <td>{{ h.nombre }}</td>
+                        <td>{{ h.apellidos }}</td>
+                        <td>{{ h.correo }}</td>
+                        <td>{{ h.num_telefono }}</td>
+                        <td>{{ h.residencia }}</td>
+                        <td><a href="/eliminarHuesped/{{h.rut}}" class="btn btn-danger btn-sm "
+                                onclick="return confirm('¿Desea Eliminar el Huesped?')"> <i class="bi bi-trash"></i></a>
+                        </td>
+                        <td><a href="/editarHuesped/{{h.rut}}" class="btn btn-warning btn-sm "> <i
+                                    class="bi bi-pencil"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>NO HAY DATOS</p>
+        {% endif %}
+    </div>
+    <!-- Columna para los filtros -->
+    <div class="col-sm-2 col-md-4 col-lg-2 col-xl-2">
+        <div id="changelist-filter">
+            <h3 class="alert alert-info text-center">Filtro</h3>
+            <div class="card">
+                <div class="card-body">
+                    <details data-filter-title="residencia" open="">
+                        <summary>
+                            Por Residencia
+                        </summary>
+                        <ul>
+                            <li class="selected">
+                                <a href="?">Todo</a>
+                            </li>
+                            {% for residencia in residencias %}
+                            <li>
+                                <a href="?residencia__exact={{ residencia }}">{{ residencia }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif tabla == 'Reservas' %}
+    <div class="col-sm-8 col-md-6 col-lg-8 col-xl-8">
+        <center>
+            <h3 class="alert alert-success">Listado de Reservas</h3>
+        </center>
+        {% if data3 %}
+        <div class="table-">
+            <table class="table table-active ">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Rut Huesped</th>
+                        <th>F.Rerserva</th>
+                        <th>N.Habitacion</th>
+                        <th>F.Ingreso</th>
+                        <th>F.Salida</th>
+                        <th>T.Pagar</th>
+                        <th>Estado</th>
+                        <th>Usuario</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in data3 %}
+                    <tr>
+                        <td>{{ h.id_reserva }}</td>
+                        <td>{{ h.rut_huesped }}</td>
+                        <td>{{ h.fechaReserva }}</td>
+                        <td>{{ h.num_habitacion }}</td>
+                        <td>{{ h.fechaIngreso }}</td>
+                        <td>{{ h.fechaSalida }}</td>
+                        <td>{{ h.totalpagar }}</td>
+                        <td>{{ h.estado }}</td>
+                        <td>{{ h.usuario }}</td>
+                        <td><a href="/eliminarReserva/{{h.id_reserva}}" class="btn btn-danger btn-sm "
+                                onclick="return confirm('¿Desea Eliminar la Rerserva?')"> <i
+                                    class="bi bi-trash"></i></a></td>
+                        <td><a href="/editarReserva/{{h.id_reserva}}" class="btn btn-warning btn-sm "> <i
+                                    class="bi bi-pencil"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>NO HAY DATOS</p>
+        {% endif %}
+    </div>
+    <!-- Columna para los filtros -->
+    <div class="col-sm-2 col-md-4 col-lg-2 col-xl-2">
+        <div id="changelist-filter">
+            <h3 class="alert alert-info text-center">Filtro</h3>
+            <div class="card">
+                <div class="card-body">
+                    <details data-filter-title="usuario" open="">
+                        <summary>
+                            Por Usuario
+                        </summary>
+                        <ul>
+                            <li class="selected">
+                                <a href="?">Todo</a>
+                            </li>
+                            {% for usuario in usuarios %}
+                            <li>
+                                <a href="?usuario__exact={{ usuario }}">{{ usuario }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                    
+                    <details data-filter-title="habitacion" open="">
+                        <summary>
+                            Por Habitación
+                        </summary>
+                        <ul>
+                            <li class="selected">
+                                <a href="?">Todo</a>
+                            </li>
+                            {% for habitacion in habitaciones %}
+                            <li>
+                                <a href="?num_habitacion__exact={{ habitacion }}">{{ habitacion }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% elif tabla == 'Usuarios' %}
+    <div class="col-sm-8 col-md-6 col-lg-8 col-xl-8">
+        {% if data4 %}
+        <center>
+            <h3 class="alert alert-success">Listado de Usuarios</h3>
+        </center>
+        <div class="table-responsive py-2">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Rut</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Estado</th>
+                        <th>Cargo</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in data4 %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ h.rut_usu }}</td>
+                        <td>{{ h.nombre }}</td>
+                        <td>{{ h.apellidos }}</td>
+                        <td>{{ h.estado }}</td>
+                        <td>{{ h.cargo }}</td>
+                        <td><a href="/eliminarUsuario/{{h.rut_usu}}" class="btn btn-danger btn-sm "
+                                onclick="return confirm('¿Desea Eliminar el Usuario?')"> <i class="bi bi-trash"></i></a>
+                        </td>
+                        <td><a href="/editarUsuario/{{h.rut_usu}}" class="btn btn-warning btn-sm "> <i
+                                    class="bi bi-pencil"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>NO HAY DATOS</p>
+        {% endif %}
+    </div>
+    <!-- Columna para los filtros -->
+    <div class="col-sm-2 col-md-4 col-lg-2 col-xl-2">
+        <div id="changelist-filter">
+            <h3 class="alert alert-info text-center">Filtro</h3>
+            <div class="card">
+                <div class="card-body">
+                    <details data-filter-title="estado" open="">
+                        <summary>
+                            Por Estado
+                        </summary>
+                        <ul>
+                            <li class="selected">
+                                <a href="?">Todo</a>
+                            </li>
+                            {% for estado in estados %}
+                            <li>
+                                <a href="?estado__exact={{ estado }}">{{ estado }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

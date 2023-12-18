@@ -51,13 +51,14 @@ def administrador(request):
 
 def usuario(request):
     admin = Usuario.objects.all()
+    estados = Usuario.objects.values_list('estado', flat=True).distinct()
     form = regiusu()
     if request.method == 'POST':
         form = regiusu(request.POST)
         if form.is_valid():
             form.save()
         return redirect('/usuario') 
-    data = {'data4': admin,'tabla':'Usuarios','formu':form,'rut_usu': rut_usuform,'cargo' : 'administrador','link':"/administrador"}
+    data = {'data4': admin,'tabla':'Usuarios','formu':form,'rut_usu': rut_usuform,'cargo' : 'administrador','link':"/administrador",'estados':estados}
     return render(request, "gestion.html",data)
 
 
@@ -85,15 +86,34 @@ def editarUsuario(request, rut_usu):
 
 #LEER Y AGREGAR HABITACIONES
 def habitaciones(request):
-    habi = Habitaciones.objects.all()
+    habitaciones_filtradas = Habitaciones.objects.all()
+    estado_param = request.GET.get('estado__exact')
+    precio_param = request.GET.get('prec_habi__exact')
+    capacidad_param = request.GET.get('capacidad__exact')
+
+    if estado_param:
+        habitaciones_filtradas = habitaciones_filtradas.filter(estado=estado_param)
+    if precio_param:
+        habitaciones_filtradas = habitaciones_filtradas.filter(prec_habi=precio_param)
+    if capacidad_param:
+        habitaciones_filtradas = habitaciones_filtradas.filter(capacidad=capacidad_param)
+
     form = regihabi()
     if request.method == 'POST':
         form = regihabi(request.POST)
         if form.is_valid():
             form.save()
         return redirect('/habitacion') 
-    data = {'data1': habi,'tabla':'Habitaciones','formu':form, 'rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
-    return render(request, "gestion.html",data)
+
+    data = {
+        'data1': habitaciones_filtradas,
+        'tabla': 'Habitaciones',
+        'formu': form,
+        'rut_usu': rut_usuform,
+        'cargo': 'encargado',
+        'link': "/encargado"
+    }
+    return render(request, "gestion.html", data)
 
 #ELIMINAR HABITACION
 def eliminarHabitacion(request,num_habi):
@@ -119,13 +139,23 @@ def editarHabitacion(request, num_habi):
 #LEER Y AGREGAR HUESPEDES
 def huespedes(request):
     hues = Huespedes.objects.all()
+    # Obtén usuarios y habitaciones únicos para los filtros
+    residencia = Huespedes.objects.values_list('residencia', flat=True).distinct()
+
+    # Obtén los parámetros de la URL para filtrar las reservas
+    residencia_param = request.GET.get('residencia__exact')
+
+    # Aplica los filtros si hay parámetros en la URL
+    if residencia_param:
+        hues = hues.filter(residencia=residencia_param)
+
     form = regihues()
     if request.method == 'POST':
         form = regihues(request.POST)
         if form.is_valid():
             form.save()
         return redirect('/huesped') 
-    data = {'data2': hues,'tabla':'Huespedes','formu':form, 'rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
+    data = {'data2': hues,'tabla':'Huespedes','formu':form, 'rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado",'residencias': residencia}
     return render(request, "gestion.html",data)
 
 #ELIMINAR HUESPEDES
@@ -139,19 +169,35 @@ def editarHuesped(request, rut):
     hues = Huespedes.objects.get(rut=rut)
     form = regihues(instance=hues)
     if request.method == 'POST':
-        print("dentro del formulario")
-        form = regihabi(request.POST, instance=hues)
+        form = regihues(request.POST, instance=hues)
         if form.is_valid():
-            print("actualizado")
             form.save()
-        return redirect('/huesped')
-    data = {'tabla': 'Huespedes','formu': form, 'volver':'/huesped', 'rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
+            print("actualizado")
+        return redirect('/huesped')   
+    data = {'tabla': 'Huespedes','formu': form, 'volver':'/usuario','rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
     return render(request,'edicion.html',data)
+
 
 
 #LEER Y AGREGAR RESERVAS
 def reservas(request):
+    # Obtén todos los datos de Reservas
     rese = Reservas.objects.all()
+
+    # Obtén usuarios y habitaciones únicos para los filtros
+    usuarios = Reservas.objects.values_list('usuario', flat=True).distinct()
+    habitaciones = Reservas.objects.values_list('num_habitacion', flat=True).distinct()
+
+    # Obtén los parámetros de la URL para filtrar las reservas
+    usuario_param = request.GET.get('usuario__exact')
+    habitacion_param = request.GET.get('num_habitacion__exact')
+
+    # Aplica los filtros si hay parámetros en la URL
+    if usuario_param:
+        rese = rese.filter(usuario=usuario_param)
+    if habitacion_param:
+        rese = rese.filter(num_habitacion=habitacion_param)
+
     forms = reservar()
 
     if request.method == 'POST':
@@ -161,25 +207,23 @@ def reservas(request):
             habitacion_obj = form.cleaned_data['num_habitacion']
             fechaIngreso = form.cleaned_data['fechaIngreso']
             fechaSalida = form.cleaned_data['fechaSalida']
+            estado = form.cleaned_data['estado']
 
-            # Verificar si el RUT del huésped existe en la tabla Huespedes
             if not Huespedes.objects.filter(rut=rut).exists():
                 messages.error(request, 'El RUT del huésped no existe en la base de datos.')
                 return redirect('/reserva')
 
-            # Obtener la instancia de la habitación
             habitacion = Habitaciones.objects.get(num_habi=habitacion_obj.num_habi)
 
-            # Verificar si la habitación está disponible
             if habitacion.estado == 'disponible':
                 usuario = Usuario.objects.get(rut_usu=rut_usuform)
 
-                # Crear la reserva
                 reserva = Reservas.objects.create(
                     rut_huesped=rut,
                     num_habitacion=habitacion,
                     fechaIngreso=fechaIngreso,
                     fechaSalida=fechaSalida,
+                    estado=estado,
                     usuario=usuario
                 )
 
@@ -189,8 +233,10 @@ def reservas(request):
     else:
         form = reservar()
 
-    data = {'data3': rese, 'tabla': 'Reservas', 'formu': forms, 'rut_usu': rut_usuform, 'cargo': 'encargado', 'link': "/encargado"}
+    data = {'data3': rese, 'tabla': 'Reservas', 'formu': forms, 'rut_usu': rut_usuform, 'cargo': 'encargado', 'link': "/encargado",
+            'usuarios': usuarios, 'habitaciones': habitaciones}
     return render(request, "gestion.html", data)
+
 
 #ELIMINAR RESERVAS
 def eliminarReserva(request,id_reserva):

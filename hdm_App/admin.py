@@ -43,6 +43,6 @@ class HuespedAdmin(admin.ModelAdmin):
 class ReservasAdmin(admin.ModelAdmin):
     list_display=('id_reserva','rut_huesped','fechaReserva','num_habitacion','fechaIngreso','fechaSalida','usuario','checkout_realizado',)
     search_fields = ('rut_huesped','id_reserva',)
-    list_filter = ('usuario','checkout_realizado',)
+    list_filter = ('usuario','checkout_realizado','num_habitacion')
 
 #admin.site.register(Usuario,UsuarioAdmin)

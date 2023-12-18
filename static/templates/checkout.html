@@ -1,0 +1,77 @@
+{% extends "./base.html" %}
+
+{% block title %} CHECKOUT {% endblock %}
+
+{% block body %}
+<div class="row mt-2">
+    <div class="col-md-8 offset-md-2">
+        <center>
+            <h2 class="alert alert-info text-center">Checkout</h2>
+        </center>
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form_reserva.id_reserva }}
+                    <div class="text-center">
+                        {% if reserva %}
+                        <div class="table-responsive">
+                            <table class="table table-active">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Rut Huesped</th>
+                                        <th>F.Rerserva</th>
+                                        <th>N.Habitacion</th>
+                                        <th>F.Ingreso</th>
+                                        <th>F.Salida</th>
+                                        <th>T.Pagar</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ reserva.id_reserva }}</td>
+                                        <td>{{ reserva.rut_huesped }}</td>
+                                        <td>{{ reserva.fechaReserva }}</td>
+                                        <td>{{ reserva.num_habitacion }}</td>
+                                        <td>{{ reserva.fechaIngreso }}</td>
+                                        <td>{{ reserva.fechaSalida }}</td>
+                                        <td>{{ reserva.totalpagar }}</td>
+                                        <td>{{ reserva.estado }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        <h3>TOTAL A PAGAR : ${{ reserva.totalpagar }}</h3>
+                        </div>
+                        <div class="form-group text-center">
+                            <label for="{{ form_pago.metodo_pago.id_for_label }}" class="text-center">Método de
+                                Pago:</label>
+                            <div class="form-check form-check-inline">
+                                {% for radio in form_pago.metodo_pago %}
+                                <label class="form-check-label mr-2">
+                                    {{ radio.tag }} {{ radio.choice_label }}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="form-group text-center">
+                            <div class="btn-group py-2">
+                                <button type="submit" class="btn btn-success text-white btn-group">
+                                    <i class="bi bi-save"></i> PAGAR
+                                </button>
+                                <a href="{{ volver }}" class="btn btn-danger btn-group">
+                                    <i class="bi bi-skip-backward-circle"></i> Volver
+                                </a>
+                            </div>
+                        </div>
+                </form>
+                {% else %}
+                <p>NO HAY DATOS</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

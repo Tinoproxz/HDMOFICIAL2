@@ -1,8 +1,9 @@
 from datetime import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from .models import Habitaciones, Usuario,Huespedes,Reservas
-from .forms import inicioSesion,regihabi,regihues,regiusu,reservar, contacto
+from .forms import inicioSesion,regihabi,regihues,regiusu,reservar, contacto, MetodoPagoForm, CHECKOUT
 from django.contrib import messages
+from django.shortcuts import render
 # Create your views here.
 
 def iniSesion(request):
@@ -47,8 +48,9 @@ def soporte (request):
         form = contacto(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('/contacto')
-    data = {'formu':form}
+            messages.success(request, 'Pronto nos pondremos en contacto para resolver su petición.')
+        return redirect('/home')
+    data = {'formu':form,'volver':'/home','rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
     return render (request,"contacto.html",data)
 
 def encargado(request):
@@ -162,7 +164,7 @@ def huespedes(request):
 def eliminarHuesped(request,rut):
     hues = Huespedes.objects.get(rut=rut)
     hues.delete()
-    return redirect('/huesped',{'r2':'HUESPED ELIMINADO CORRECTAMENTE'})
+    return redirect('/huesped')
 
 #EDITAR HUESPEDES
 def editarHuesped(request, rut):
@@ -174,7 +176,7 @@ def editarHuesped(request, rut):
             form.save()
             print("actualizado")
         return redirect('/huesped')   
-    data = {'tabla': 'Huespedes','formu': form, 'volver':'/usuario','rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
+    data = {'tabla': 'Huespedes','formu': form, 'volver':'/huesped','rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
     return render(request,'edicion.html',data)
 
 
@@ -246,6 +248,7 @@ def eliminarReserva(request,id_reserva):
 
 #EDITAR RESERVAS
 def editarReserva(request, id_reserva):
+
     rese = Reservas.objects.get(id_reserva=id_reserva)
     form = reservar(instance=rese)
     if request.method == 'POST':
@@ -256,3 +259,46 @@ def editarReserva(request, id_reserva):
         return redirect('/reserva')
     data = {'tabla': 'Reservas','formu': form, 'volver':'/reserva','rut_usu': rut_usuform,'cargo' : 'encargado','link':"/encargado"}
     return render(request,'edicion.html',data)
+
+def checkout(request, id_reserva):
+    reserva_instance = get_object_or_404(Reservas, id_reserva=id_reserva)
+
+    if request.method == 'POST':
+        form_reserva = reservar(request.POST, instance=reserva_instance)
+        form_pago = CHECKOUT(request.POST)
+
+        if form_reserva.is_valid() and form_pago.is_valid():
+            # Guardar los cambios en la reserva
+            form_reserva.save()
+
+            # Acceder al valor del método de pago seleccionado
+            metodo_pago = form_pago.cleaned_data['metodo_pago']
+            # Realizar las acciones necesarias para el pago
+
+            # Cambiar el estado de la reserva a "cancelado"
+            reserva_instance.estado = 'cancelado'
+            reserva_instance.save()
+
+            # Obtener la habitación asociada a la reserva
+            habitacion_asociada = reserva_instance.num_habitacion
+            if habitacion_asociada:
+                # Cambiar el estado de la habitación a "en mantenimiento"
+                habitacion_asociada.estado = 'en mantenimiento'
+                habitacion_asociada.save()
+
+            return redirect('/reserva')
+
+    else:
+        form_reserva = reservar(instance=reserva_instance)
+        form_pago = CHECKOUT(initial={'id_reserva': id_reserva})
+
+    data = {
+        'form_reserva': form_reserva,
+        'form_pago': form_pago,
+        'reserva': reserva_instance,
+        'volver': '/reserva',
+        'cargo': 'encargado',
+        'link': "/encargado",
+    }
+
+    return render(request, 'checkout.html', data)

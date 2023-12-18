@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pago Confirmado</title>
+</head>
+<body>
+    <h1>Pago Confirmado</h1>
+    <p>¡Gracias por su pago!</p>
+    <p>Detalles de la reserva:</p>
+    <ul>
+        <li>ID de Reserva: {{ reserva.id_reserva }}</li>
+        <li>Total Pagado: {{ total_pagar }}</li>
+        <!-- Mostrar otros detalles de la reserva según sea necesario -->
+    </ul>
+    
+    <p>¿Desea realizar otra acción?</p>
+    <a href="{% url '/home' %}">Ir a otra vista</a>
+</body>
+</html>

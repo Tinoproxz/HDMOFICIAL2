@@ -81,6 +81,23 @@ class reservar(forms.ModelForm):
             'estado': forms.Select(attrs={'class': 'form-control'}),
         }
 
+class MetodoPagoForm(forms.Form):
+    METODOS_PAGO = [
+        ('tarjeta_credito', 'Tarjeta de Crédito'),
+        ('efectivo', 'Efectivo'),
+        # Agrega más opciones según sea necesario
+    ]
+
+    metodo_pago = forms.ChoiceField(choices=METODOS_PAGO, widget=forms.RadioSelect())
+class CHECKOUT(forms.Form):
+    id_reserva = forms.IntegerField(widget=forms.HiddenInput(attrs={'class': 'form-control'}))
+    METODOS_PAGO = [
+        ('efectivo', 'Efectivo'),
+        ('transferencia', 'Transferencia'),
+        ('credito', 'Tarjeta de Crédito'),
+        ('debito', 'Tarjeta de Débito'),
+    ]
+    metodo_pago = forms.ChoiceField(choices=METODOS_PAGO, widget=forms.RadioSelect(attrs={'class': 'form-check-input'}))
 
 
 

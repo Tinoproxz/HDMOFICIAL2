@@ -140,10 +140,10 @@
 
     {% elif tabla == 'Huespedes' %}
     <div class="col-sm-8 col-md-6 col-lg-8 col-xl-8">
-        {% if data2 %}
         <center>
             <h3 class="alert alert-success">Listado de Huespedes</h3>
         </center>
+        {% if data2 %}
         <div class="table-responsive py-2">
             <table class="table table-active">
                 <thead>
@@ -224,7 +224,7 @@
                         <th>T.Pagar</th>
                         <th>Estado</th>
                         <th>Usuario</th>
-                        <th colspan="2">Opciones</th>
+                        <th colspan="3" class="text-center">Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -244,6 +244,8 @@
                                     class="bi bi-trash"></i></a></td>
                         <td><a href="/editarReserva/{{h.id_reserva}}" class="btn btn-warning btn-sm "> <i
                                     class="bi bi-pencil"></i></a></td>
+                        <td><a href="/checkoutReserva/{{h.id_reserva}}" class="btn btn-info btn-sm "> <i
+                                    class="bi bi-door-closed"></i></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

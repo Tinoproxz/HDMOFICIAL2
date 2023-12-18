@@ -1,5 +1,5 @@
 from django import forms
-from .models import Usuario,Habitaciones,Huespedes,Reservas
+from .models import Usuario,Habitaciones,Huespedes,Reservas, Soporte
 
 #CLASES ADMINISTRADOR
 #CLASE DE INICIO DE SESION PARA EL SISTEMA
@@ -9,6 +9,19 @@ class inicioSesion(forms.Form):
 
     rut_usu.widget.attrs['class'] = 'form-control'
     password.widget.attrs['class'] = 'form-control'
+
+#FORMULARIO PARA CONTACTAR
+class contacto(forms.ModelForm):
+    class Meta:
+        model = Soporte
+        fields = ['nombre','apellido','celular','correo','descripcion']
+        widgets ={
+            'nombre': forms.TextInput(attrs={'class': 'form-control'}),
+            'apellido': forms.TextInput(attrs={'class': 'form-control'}),
+            'celular': forms.NumberInput(attrs={'class': 'form-control'}),
+            'correo': forms.EmailInput(attrs={'class': 'form-control'}),
+            'descripcion':forms.Textarea(attrs={'class': 'form-control'})
+        }
 
 #FORMULARIO PARA REGISTRAR Y ACTUALIZAR UN USUARIO (SOLO LO PUEDE HACER EL ADMINISTRADOR)
 class regiusu(forms.ModelForm):

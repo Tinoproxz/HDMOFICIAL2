@@ -1,0 +1,43 @@
+{% extends "./base.html" %}
+
+{% block title %} 
+    Contacto Soporte
+{% endblock %}
+
+{% block body %}
+    {% if cargo == 'administrador' or 'encargado' %}
+        <div class="row m-2">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xl-4">
+                <center>
+                    <h3 class="alert alert-warning">Formulario de Contacto</h3>
+                </center>
+                <form method="POST">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            {% csrf_token %}
+                            {{ formu }}
+                            <br>
+                            <div class="d-grid gap-2">
+                                <button type="submit" method="POST" class="btn btn-success text-white mx-auto d-block ">
+                                    <i class="bi bi-save"> Enviar</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-8 col-md-6 col-lg-8 col-xl-8">
+                <center>
+                    <h3 class="alert alert-success">QR WhattsApp</h3>
+                    <div class="card">
+                        <div class="car-body">
+                            <h5>Servicio disponible desde las 8 am hasta las 22 hrs</h5>
+                            <img src="/static/img/qr.jpg" style="width: 300px;">
+                        </div>
+                    </div>
+                </center>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.shortcuts import render, redirect
 from .models import Habitaciones, Usuario,Huespedes,Reservas
-from .forms import inicioSesion,regihabi,regihues,regiusu,reservar
+from .forms import inicioSesion,regihabi,regihues,regiusu,reservar, contacto
 from django.contrib import messages
 # Create your views here.
 
@@ -41,6 +41,16 @@ def iniSesion(request):
     
 
 #VISTAS ADMINISTRADOR
+def soporte (request):
+    form = contacto()
+    if request.method == 'POST':
+        form = contacto(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('/contacto')
+    data = {'formu':form}
+    return render (request,"contacto.html",data)
+
 def encargado(request):
     data ={'cargo' : 'encargado','rut_usu': rut_usuform,'title':'Encargado HDM'}
     return render(request,"mains.html",data)

@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 urlpatterns = [
     path('', views.iniSesion),
+    path('contacto/', views.soporte),
     path('administrador/', views.administrador),
     path('encargado/',views.encargado),
     # HABITACION

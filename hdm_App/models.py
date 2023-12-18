@@ -18,6 +18,15 @@ class Usuario(models.Model):
 
     def __str__(self):
         return self.rut_usu
+    
+
+class Soporte(models.Model):
+    id_soporte = models.AutoField(primary_key=True)
+    nombre = models.CharField(max_length=80,validators=[validators.MinLengthValidator(1), validators.MaxLengthValidator(80)])
+    apellido = models.CharField(max_length=80,validators=[validators.MinLengthValidator(1), validators.MaxLengthValidator(80)])
+    celular = models.CharField(max_length=15)
+    correo = models.EmailField(max_length=30)
+    descripcion = models.CharField(max_length=50)
 
 class Habitaciones(models.Model):
     ESTADOS=[('disponible', 'Disponible'),('no disponible', 'No Disponible'),('mantencion','En Mantencion'),]

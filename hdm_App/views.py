@@ -23,7 +23,6 @@ def iniSesion(request):
                     # Obtiene el usuario encontrado
                     user = userDB.first()
                     
-                    # Redirige a diferentes menus segun el tipo de cargo
                     if user.cargo == 'encargado':
                         return redirect('encargado/')  
                     elif user.cargo == 'administrador':
@@ -148,7 +147,6 @@ def huespedes(request):
     residencia = Huespedes.objects.values_list('residencia', flat=True).distinct()
     residencia_param = request.GET.get('residencia__exact')
 
-    # Aplica los filtros si hay parametros en la URL
     if residencia_param:
         hues = hues.filter(residencia=residencia_param)
 
@@ -184,18 +182,13 @@ def editarHuesped(request, rut):
 
 #LEER Y AGREGAR RESERVAS
 def reservas(request):
-    # obtiene todos los datos de Reservas
     rese = Reservas.objects.all()
-
-    # obtiene usuarios y habitaciones unicos para los filtros
     usuarios = Reservas.objects.values_list('usuario', flat=True).distinct()
     habitaciones = Reservas.objects.values_list('num_habitacion', flat=True).distinct()
 
-    # obtiene los parametros de la url para filtrar las reservas
     usuario_param = request.GET.get('usuario__exact')
     habitacion_param = request.GET.get('num_habitacion__exact')
 
-    # aplica los filtros si hay parametros en la url
     if usuario_param:
         rese = rese.filter(usuario=usuario_param)
     if habitacion_param:
@@ -269,21 +262,17 @@ def checkout(request, id_reserva):
         form_pago = CHECKOUT(request.POST)
 
         if form_reserva.is_valid() and form_pago.is_valid():
-            # Guardar los cambios en la reserva
             form_reserva.save()
 
-            # Acceder al valor del método de pago seleccionado
             metodo_pago = form_pago.cleaned_data['metodo_pago']
-            # Realizar las acciones necesarias para el pago
 
-            # Cambiar el estado de la reserva a "cancelado"
+
             reserva_instance.estado = 'cancelado'
             reserva_instance.save()
 
-            # Obtener la habitación asociada a la reserva
             habitacion_asociada = reserva_instance.num_habitacion
             if habitacion_asociada:
-                # Cambiar el estado de la habitación a "en mantenimiento"
+
                 habitacion_asociada.estado = 'en mantenimiento'
                 habitacion_asociada.save()
 

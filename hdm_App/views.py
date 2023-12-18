@@ -105,14 +105,7 @@ def habitaciones(request):
             form.save()
         return redirect('/habitacion') 
 
-    data = {
-        'data1': habitaciones_filtradas,
-        'tabla': 'Habitaciones',
-        'formu': form,
-        'rut_usu': rut_usuform,
-        'cargo': 'encargado',
-        'link': "/encargado"
-    }
+    data = {'data1': habitaciones_filtradas,'tabla': 'Habitaciones','formu': form,'rut_usu': rut_usuform,'cargo': 'encargado','link': "/encargado"}
     return render(request, "gestion.html", data)
 
 #ELIMINAR HABITACION
@@ -139,13 +132,10 @@ def editarHabitacion(request, num_habi):
 #LEER Y AGREGAR HUESPEDES
 def huespedes(request):
     hues = Huespedes.objects.all()
-    # Obtén usuarios y habitaciones únicos para los filtros
     residencia = Huespedes.objects.values_list('residencia', flat=True).distinct()
-
-    # Obtén los parámetros de la URL para filtrar las reservas
     residencia_param = request.GET.get('residencia__exact')
 
-    # Aplica los filtros si hay parámetros en la URL
+    # Aplica los filtros si hay parametros en la URL
     if residencia_param:
         hues = hues.filter(residencia=residencia_param)
 
@@ -181,18 +171,18 @@ def editarHuesped(request, rut):
 
 #LEER Y AGREGAR RESERVAS
 def reservas(request):
-    # Obtén todos los datos de Reservas
+    # obtiene todos los datos de Reservas
     rese = Reservas.objects.all()
 
-    # Obtén usuarios y habitaciones únicos para los filtros
+    # obtiene usuarios y habitaciones unicos para los filtros
     usuarios = Reservas.objects.values_list('usuario', flat=True).distinct()
     habitaciones = Reservas.objects.values_list('num_habitacion', flat=True).distinct()
 
-    # Obtén los parámetros de la URL para filtrar las reservas
+    # obtiene los parametros de la url para filtrar las reservas
     usuario_param = request.GET.get('usuario__exact')
     habitacion_param = request.GET.get('num_habitacion__exact')
 
-    # Aplica los filtros si hay parámetros en la URL
+    # aplica los filtros si hay parametros en la url
     if usuario_param:
         rese = rese.filter(usuario=usuario_param)
     if habitacion_param:

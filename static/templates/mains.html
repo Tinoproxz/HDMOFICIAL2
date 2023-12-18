@@ -6,47 +6,75 @@
 
 {% block body %}
     {% if messages %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        {% for message in messages %}
-            alert("{{ message }}");
-        {% endfor %}
-        });
-    </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                {% for message in messages %}
+                    alert("{{ message }}");
+                {% endfor %}
+            });
+        </script>
     {% endif %}
+    
     {% if cargo == 'administrador' %}
-    <body>
-        hola admin
-    </body>
+        <body>
+            hola admin
+        </body>
 
     {% elif cargo == 'encargado' %}
-    <body>
-        <div class="row">
-            <!--style="background: url(/static/img/fondo.jpg); background-size:cover;">  -->
-            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                <div>
-                    <center><h3 class="alert alert-warning">PRECIOS DE HABITACIONES</h3></center>
-                </div>
-                <div class="card">
-                    <img src="/static/img/habitacion.jpg" class="card-img-top" alt="...">
-                    <div class="card-body text-center">
-                        <p class="card-text">2 PERSONAS = $25.000</p>
-                        <p class="card-text">4 PERSONAS = $40.000</p>
-                        <p class="card-text">6 PERSONAS = $75.000</p>
+        <body>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                    <div>
+                        <center><h3 class="alert alert-warning">PRECIOS DE HABITACIONES</h3></center>
+                    </div>
+                    <div class="card">
+                        <img src="/static/img/habitacion.jpg" class="card-img-top" alt="...">
+                        <div class="card-body text-center">
+                            <p class="card-text">2 PERSONAS = $25.000</p>
+                            <p class="card-text">4 PERSONAS = $40.000</p>
+                            <p class="card-text">6 PERSONAS = $75.000</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
-                <center><h3 class="alert alert-success">ESTADO HABITACIONES</h3></center>
+                <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
+                    <center>
+                        <h3 class="alert alert-success">ESTADO HABITACIONES</h3>
+                    </center>
                     <div class="table-responsive">
+                        <style>
+                            .green-card {
+                                background-color: #28a745;
+                            }
+    
+                            .red-card {
+                                background-color: #dc3545;
+                            }
+    
+                            .gray-card {
+                                background-color: #6c757d;
+                            }
+                        </style>
                         <table class="table table-sm">
-                            AQUI IRAN CARDS CON HABITACIONES ACTIVAS
+                            {% for habitaciones in data1 %}
+                                <tr>
+                                    <td>
+                                        <div class="row-md-4">
+                                            <div class="card 
+                                            {% if habitaciones.estado == 'disponible' %}green-card{% elif habitaciones.estado == 'no disponible' %}red-card{% else %}gray-card{% endif %} text-white mb-3">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Habitación {{ habitaciones.num_habi }}</h5>
+                                                    <p class="card-text">Estado: {{ habitaciones.estado }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </table>
                     </div>
-            </div>
-        </div>       
-    </body>
-
+                </div>
+            </div>       
+        </body>
     {% endif %}
 
 {% endblock %}

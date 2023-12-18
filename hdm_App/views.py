@@ -54,7 +54,8 @@ def soporte (request):
     return render (request,"contacto.html",data)
 
 def encargado(request):
-    data ={'cargo' : 'encargado','rut_usu': rut_usuform,'title':'Encargado HDM'}
+    habitaciones_filtradas = Habitaciones.objects.all()
+    data ={'data1': habitaciones_filtradas,'cargo' : 'encargado','rut_usu': rut_usuform,'title':'Encargado HDM'}
     return render(request,"mains.html",data)
 
 def administrador(request):

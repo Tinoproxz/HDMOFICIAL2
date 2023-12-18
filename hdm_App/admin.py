@@ -10,17 +10,6 @@ class UsuarioAdmin(admin.ModelAdmin):
     #list_editable = ('nombre',)
     list_filter = ('estado',)
     #exclude = ('rut_usu',)
-    fieldsets = (
-        (None,{
-            'fields': ('nombre',)
-        }),
-        ('Advanced options',
-            {
-                'classes':('collapse','wide','extrapretty'),
-                'fields':('rut_usu',)
-            }
-        )
-    )
     def mayunombre(self,obj):
         return obj.nombre.upper()
     mayunombre.short_description = "Nombre (MAYUS)"
